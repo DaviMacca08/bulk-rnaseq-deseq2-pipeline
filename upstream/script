@@ -1,0 +1,211 @@
+#!/bin/sh
+
+conda activate rnaseq
+
+#STEP-1 Download the SRR from GEO and estract the FASTQ files
+
+prefetch SRR36749378 
+prefetch SRR36749379 
+prefetch SRR36749380 
+prefetch SRR36749381 
+prefetch SRR36749382 
+prefetch SRR36749383 
+
+fasterq-dump SRR36749378 --split-files --skip-technical --threads 4
+fasterq-dump SRR36749379 --split-files --skip-technical --threads 4
+fasterq-dump SRR36749380 --split-files --skip-technical --threads 4
+fasterq-dump SRR36749381 --split-files --skip-technical --threads 4
+fasterq-dump SRR36749382 --split-files --skip-technical --threads 4
+fasterq-dump SRR36749373 --split-files --skip-technical --threads 4
+
+#STEP-2 Perform FastQC and MultiQC on compressed FASTQ files
+
+pigz -p 4 ./fastq/SRR36749378_*.fastq
+pigz -p 4 ./fastq/SRR36749379_*.fastq
+pigz -p 4 ./fastq/SRR36749380_*.fastq
+pigz -p 4 ./fastq/SRR36749381_*.fastq
+pigz -p 4 ./fastq/SRR36749382_*.fastq
+pigz -p 4 ./fastq/SRR36749383_*.fastq
+
+fastqc -t 4 -o ./report/fastqc/first ./report/fastq/SRR36749378_*.fastq.gz
+fastqc -t 4 -o ./report/fastqc/first ./report/fastq/SRR36749379_*.fastq.gz
+fastqc -t 4 -o ./report/fastqc/first ./report/fastq/SRR36749380_*.fastq.gz
+fastqc -t 4 -o ./report/fastqc/first ./report/fastq/SRR36749381_*.fastq.gz
+fastqc -t 4 -o ./report/fastqc/first ./report/fastq/SRR36749382_*.fastq.gz
+fastqc -t 4 -o ./report/fastqc/first ./report/fastq/SRR36749383_*.fastq.gz
+
+multiqc ./report/fastqc/first -o ./report/multiqc/first
+
+#STEP-3 Trimmomatic for remove adapters content 
+
+#SRR36749378
+trimmomatic PE \
+-threads 4 \
+./report/fastq/SRR36749378_1.fastq.gz \
+./report/fastq/SRR36749378_2.fastq.gz \
+./report/trimmomatic/clean/SRR36749378_1_trim.fastq.gz \
+./report/trimmomatic/unpaired/SRR36749378_1_unpa.fastq.gz \
+./report/trimmomatic/clean/SRR36749378_2_trim.fastq.gz \
+./report/trimmomatic/unpaired/SRR36749378_2_unpa.fastq.gz \
+ILLUMINACLIP:$HOME/miniconda3/envs/rnaseq/share/trimmomatic/adapters/TruSeq3-PE.fa:2:30:10 \
+SLIDINGWINDOW:4:20 \
+LEADING:3 \
+TRAILING:3 \
+MINLEN:50
+
+#SRR36749379
+trimmomatic PE \
+-threads 4 \
+./report/fastq/SRR36749379_1.fastq.gz \
+./report/fastq/SRR36749379_2.fastq.gz \
+./report/trimmomatic/clean/SRR36749379_1_trim.fastq.gz \
+./report/trimmomatic/unpaired/SRR36749379_1_unpa.fastq.gz \
+./report/trimmomatic/clean/SRR36749379_2_trim.fastq.gz \
+./report/trimmomatic/unpaired/SRR36749379_2_unpa.fastq.gz \
+ILLUMINACLIP:$HOME/miniconda3/envs/rnaseq/share/trimmomatic/adapters/TruSeq3-PE.fa:2:30:10 \
+SLIDINGWINDOW:4:20 \
+LEADING:3 \
+TRAILING:3 \
+MINLEN:50
+
+#SRR36749380
+trimmomatic PE \
+-threads 4 \
+./report/fastq/SRR36749380_1.fastq.gz \
+./report/fastq/SRR36749380_2.fastq.gz \
+./report/trimmomatic/clean/SRR36749380_1_trim.fastq.gz \
+./report/trimmomatic/unpaired/SRR36749380_1_unpa.fastq.gz \
+./report/trimmomatic/clean/SRR36749380_2_trim.fastq.gz \
+./report/trimmomatic/unpaired/SRR36749380_2_unpa.fastq.gz \
+ILLUMINACLIP:$HOME/miniconda3/envs/rnaseq/share/trimmomatic/adapters/TruSeq3-PE.fa:2:30:10 \
+SLIDINGWINDOW:4:20 \
+LEADING:3 \
+TRAILING:3 \
+MINLEN:50
+
+
+#SRR36749381
+trimmomatic PE \
+-threads 4 \
+./report/fastq/SRR36749381_1.fastq.gz \
+./report/fastq/SRR36749381_2.fastq.gz \
+./report/trimmomatic/clean/SRR36749381_1_trim.fastq.gz \
+./report/trimmomatic/unpaired/SRR36749381_1_unpa.fastq.gz \
+./report/trimmomatic/clean/SRR36749381_2_trim.fastq.gz \
+./report/trimmomatic/unpaired/SRR36749381_2_unpa.fastq.gz \
+ILLUMINACLIP:$HOME/miniconda3/envs/rnaseq/share/trimmomatic/adapters/TruSeq3-PE.fa:2:30:10 \
+SLIDINGWINDOW:4:20 \
+LEADING:3 \
+TRAILING:3 \
+MINLEN:50
+
+#SRR36749382
+trimmomatic PE \
+-threads 4 \
+./report/fastq/SRR36749382_1.fastq.gz \
+./report/fastq/SRR36749382_2.fastq.gz \
+./report/trimmomatic/clean/SRR36749382_1_trim.fastq.gz \
+./report/trimmomatic/unpaired/SRR36749382_1_unpa.fastq.gz \
+./report/trimmomatic/clean/SRR36749382_2_trim.fastq.gz \
+./report/trimmomatic/unpaired/SRR36749382_2_unpa.fastq.gz \
+ILLUMINACLIP:$HOME/miniconda3/envs/rnaseq/share/trimmomatic/adapters/TruSeq3-PE.fa:2:30:10 \
+SLIDINGWINDOW:4:20 \
+LEADING:3 \
+TRAILING:3 \
+MINLEN:50
+
+#SRR36749383
+trimmomatic PE \
+-threads 4 \
+./report/fastq/SRR36749383_1.fastq.gz \
+./report/fastq/SRR36749383_2.fastq.gz \
+./report/trimmomatic/clean/SRR36749383_1_trim.fastq.gz \
+./report/trimmomatic/unpaired/SRR36749383_1_unpa.fastq.gz \
+./report/trimmomatic/clean/SRR36749383_2_trim.fastq.gz \
+./report/trimmomatic/unpaired/SRR36749383_2_unpa.fastq.gz \
+ILLUMINACLIP:$HOME/miniconda3/envs/rnaseq/share/trimmomatic/adapters/TruSeq3-PE.fa:2:30:10 \
+SLIDINGWINDOW:4:20 \
+LEADING:3 \
+TRAILING:3 \
+MINLEN:50
+
+#STEP-4 Perform FastqQC and MultiQC after trimming 
+
+fastqc -t 4 -o ./report/fastqc/trim ./report/trimmomatic/clean/SRR36749378_*_trim.fastq.gz
+fastqc -t 4 -o ./report/fastqc/trim ./report/trimmomatic/clean/SRR36749379_*_trim.fastq.gz
+fastqc -t 4 -o ./report/fastqc/trim ./report/trimmomatic/clean/SRR36749380_*_trim.fastq.gz
+fastqc -t 4 -o ./report/fastqc/trim ./report/trimmomatic/clean/SRR36749381_*_trim.fastq.gz
+fastqc -t 4 -o ./report/fastqc/trim ./report/trimmomatic/clean/SRR36749382_*_trim.fastq.gz
+fastqc -t 4 -o ./report/fastqc/trim ./report/trimmomatic/clean/SRR36749383_*_trim.fastq.gz
+
+multiqc ./report/fastqc/trim -o ./report/multiqc/trim
+
+#STEP-5 HISAT2 for aligment (write only for the first SRR)
+
+hisat2-build -p 4 /Users/davidemaccarrone/references/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz \
+/Users/davidemaccarrone/references/index_hisat2
+
+#SRR36749378
+hisat2 -p 4 \
+-x /Users/davidemaccarrone/references/index_hisat2/index_hisat2 \
+-1 ./report/trimmomatic/clean/SRR36749378_1_trim.fastq.gz \
+-2 ./report/trimmomatic/clean/SRR36749378_2_trim.fastq.gz \
+-S ./report/hisat2/samfile/SRR36749378_sam.sam \
+--new-summary 2> ./report/hisat2/summary/SRR36749378-summary.txt
+
+#SRR36749379
+hisat2 -p 4 \
+-x /Users/davidemaccarrone/references/index_hisat2/index_hisat2 \
+-1 ./report/trimmomatic/clean/SRR36749379_1_trim.fastq.gz \
+-2 ./report/trimmomatic/clean/SRR36749379_2_trim.fastq.gz \
+-S ./report/hisat2/samfile/SRR36749379_sam.sam \
+--new-summary 2> ./report/hisat2/summary/SRR36749379-summary.txt
+
+#SRR36749380
+hisat2 -p 4 \
+-x /Users/davidemaccarrone/references/index_hisat2/index_hisat2 \
+-1 ./report/trimmomatic/clean/SRR36749380_1_trim.fastq.gz \
+-2 ./report/trimmomatic/clean/SRR36749380_2_trim.fastq.gz \
+-S ./report/hisat2/samfile/SRR36749380_sam.sam \
+--new-summary 2> ./report/hisat2/summary/SRR36749380-summary.txt
+
+#SRR36749381
+hisat2 -p 4 \
+-x /Users/davidemaccarrone/references/index_hisat2/index_hisat2 \
+-1 ./report/trimmomatic/clean/SRR36749381_1_trim.fastq.gz \
+-2 ./report/trimmomatic/clean/SRR36749381_2_trim.fastq.gz \
+-S ./report/hisat2/samfile/SRR36749381_sam.sam \
+--new-summary 2> ./report/hisat2/summary/SRR36749381-summary.txt
+
+#SRR36749382
+hisat2 -p 4 \
+-x /Users/davidemaccarrone/references/index_hisat2/index_hisat2 \
+-1 ./report/trimmomatic/clean/SRR36749382_1_trim.fastq.gz \
+-2 ./report/trimmomatic/clean/SRR36749382_2_trim.fastq.gz \
+-S ./report/hisat2/samfile/SRR36749382_sam.sam \
+--new-summary 2> ./report/hisat2/summary/SRR36749382-summary.txt
+
+#SRR36749383
+hisat2 -p 4 \
+-x /Users/davidemaccarrone/references/index_hisat2/index_hisat2 \
+-1 ./report/trimmomatic/clean/SRR36749383_1_trim.fastq.gz \
+-2 ./report/trimmomatic/clean/SRR36749383_2_trim.fastq.gz \
+-S ./report/hisat2/samfile/SRR36749383_sam.sam \
+--new-summary 2> ./report/hisat2/summary/SRR36749383-summary.txt
+
+#STEP-6 SAM -> BAM -> BAM Sorted (write only for the first SRR)
+
+#SRR36749378
+samtools view -@ 4 -b ./report/hisat2/samfile/SRR36749378_sam.sam \
+-o ./report/hisat2/bamfile/SRR36749378_bam.bam
+
+samtools sort -@ 4 ./report/hisat2/bamfile/SRR36749378_bam.bam \
+-o ./report/hisat2/bamsort/SRR36749378_sort.bam 
+
+#STEP-7 featureCounts for quantification (all sequence together)
+
+featureCounts -T 4 \
+-a /Users/davidemaccarrone/references/Homo_sapiens.GRCh38.115.chr.gtf \
+-o ./report/featurecounts/counts.txt \
+-p -B -C \
+./report/hisat2/bamsort/*sort*.bam
